@@ -129,6 +129,41 @@ def assert_not_in(item, sequence):
     assert item not in sequence, "assertion failed: expected %r not in %r" % (item, sequence)
 
 
+def assert_any(sequence, message=None):
+    """Assert that at least one item in the given iterable is True."""
+    for item in sequence:
+        if item:
+            break
+    else:
+        fail_msg = message or "No items in the sequence were True!"
+        assert_not_reached(fail_msg)
+
+
+def assert_not_any(sequence, message=None):
+    for pos, item in enumerate(sequence):
+        if item:
+            fail_msg = message or "assertion failed: expected item in position %d to be False, got %r" % (pos, item)
+            assert_not_reached(fail_msg)
+
+
+def assert_all(sequence, message=None):
+    """Assert that all of the items in the given iterable are True."""
+    for pos, item in enumerate(sequence):
+        if not item:
+            fail_msg = message or "assertion failed: expected item in position %d to be True, got %r" % (pos, item)
+            assert_not_reached(fail_msg)
+
+
+def assert_not_all(sequence, message=None):
+    """Assert that none of the items in the given iterable are True."""
+    for item in sequence:
+        if not item:
+            break
+    else:
+        fail_msg = message or "No items in the sequence were False!"
+        assert_not_reached(fail_msg)
+
+
 def assert_starts_with(val, prefix):
     """Assert that val.startswith(prefix)."""
     msg = "%(val)r does not start with %(prefix)r" % locals()
